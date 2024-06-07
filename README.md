@@ -1,10 +1,10 @@
 # Multiple PDFs QueryBot
 
-The MultiPDF Chat App is a Python-based tool designed for interacting with multiple PDF documents through natural language queries. Users can ask questions about the content of the PDFs, and the app will deliver relevant answers based on the information within the documents. This application leverages a language model to produce precise responses. It is important to note that the app's responses are limited to the content of the loaded PDFs.
+The Multiple PDFs QueryBot is a Python-based tool for interacting with multiple PDF documents through natural language queries. Users can ask questions about the content of the PDFs, and the app will deliver relevant answers based on the information within the documents. This application leverages a language model to produce precise responses. Just to let you know, the app's responses are limited to the content of the loaded PDFs.
 
 ## How it works?
 
-The application follows these steps to provide responses to your questions:
+The application follows these steps to respond to your questions:
 
 - **PDF Loading**: The app reads multiple PDF documents and extracts their text content.
 - **Text Chunking**: The extracted text is divided into smaller, manageable chunks for efficient processing.
