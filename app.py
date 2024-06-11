@@ -28,14 +28,14 @@ def get_text_chunks(text):
     chunks = text_splitter.split_text(text)
     return chunks
 
-def get_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings()
+def get_vectorstore(text_chunks, api_key):
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=api_key)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
-def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI()
+def get_conversation_chain(vectorstore, api_key):
+    llm = ChatOpenAI(api_key=api_key, model="gpt-3.5-turbo")
     # llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
 
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
@@ -82,6 +82,7 @@ def main():
     # ---------------------------- Sidebar section ------------------------------------
     with st.sidebar:
         st.subheader("Your documents")
+        api_key = st.text_input(label="Enter OpenAI api key", type="password", placeholder="OPENAI_API_KEY")
         pdf_docs = st.file_uploader(
             "Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
 
@@ -99,13 +100,13 @@ def main():
 
                 # create vector store
                 st.write("Passing chunks in vectorstore")
-                vectorstore = get_vectorstore(text_chunks)
+                vectorstore = get_vectorstore(text_chunks, api_key)
                 time.sleep(1)
                 status.update(
                     label="Successfully process! Now you can ask a question", state="complete", expanded=False)
 
                 # create conversation chain
-                st.session_state.conversation = get_conversation_chain(vectorstore)
+                st.session_state.conversation = get_conversation_chain(vectorstore, api_key)
 
     # ---------------------------- Sidebar section ------------------------------------
 
