@@ -62,7 +62,7 @@ def main():
     load_dotenv()
     # Page config
     st.set_page_config(
-        page_title="Chat with multiple PDFs",
+        page_title="Multiple PDFs QueryBot",
         page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
@@ -72,7 +72,7 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
 
-    st.header("Chat with multiple PDFs :books:")
+    st.header("Multiple PDFs QueryBot :books:")
     user_question = st.text_input("Ask a question about your documents:")
     if user_question:
         handle_userinput(user_question)
@@ -81,7 +81,9 @@ def main():
 
     # ---------------------------- Sidebar section ------------------------------------
     with st.sidebar:
-        st.subheader("Your documents")
+        st.title("About Project")
+        st.write("**The Multiple PDFs QueryBot is a Python-based tool for interacting with multiple PDF documents through natural language queries.** Users can ask questions about the content of the PDFs, and the app will deliver relevant answers based on the information within the documents. This application leverages a language model to produce precise responses. Just to let you know, the app's responses are limited to the content of the loaded PDFs.")
+        st.subheader("Documents")
         api_key = st.text_input(label="Enter OpenAI api key", type="password", placeholder="OPENAI_API_KEY")
         pdf_docs = st.file_uploader(
             "Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
