@@ -82,7 +82,7 @@ def main():
     # ---------------------------- Sidebar section ------------------------------------
     with st.sidebar:
         st.title("About Project")
-        st.write("**The Multiple PDFs QueryBot is a Python-based tool for interacting with multiple PDF documents through natural language queries.** Users can ask questions about the content of the PDFs, and the app will deliver relevant answers based on the information within the documents. This application leverages a language model to produce precise responses. Just to let you know, the app's responses are limited to the content of the loaded PDFs.")
+        st.write("**The Multiple PDFs QueryBot is a Python-based tool for interacting with multiple PDF documents through natural language queries.**\n* Users can ask questions about the content of the PDFs, and the app will deliver relevant answers based on the information within the documents.")
         st.subheader("Documents")
         api_key = st.text_input(label="Enter OpenAI api key", type="password", placeholder="OPENAI_API_KEY")
         pdf_docs = st.file_uploader(
