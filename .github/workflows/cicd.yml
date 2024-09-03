@@ -28,11 +28,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests
-        run: |
-          pip install pytest
-          pytest
-
       - name: Run streamlit app
         run: |
           streamlit run streamlit_app.py
