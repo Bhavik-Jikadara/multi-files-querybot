@@ -8,3 +8,6 @@ altair
 tiktoken
 langchain-community
 langchain-openai
+python-docx 
+pillow
+pytesseract

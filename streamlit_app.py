@@ -7,10 +7,11 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores.faiss import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
-import time
+import time, docx, json
 from langchain_core.messages import AIMessage, HumanMessage
 load_dotenv()
 
+# PDF to text
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -19,6 +20,48 @@ def get_pdf_text(pdf_docs):
             text += page.extract_text()
     return text
 
+# .docx to text
+def get_docx_text(docx_files):
+    text = ""
+    for docx_file in docx_files:
+        doc = docx.Document(docx_file)
+        for para in doc.paragraphs:
+            text += para.text + "\n"
+    return text
+
+# JSON to text
+def get_json_text(json_files):
+    text = ""
+    for json_file in json_files:
+        data = json.load(json_file)
+        text += json.dumps(data, indent=4)
+    return text
+
+# Get text from files
+def get_text_from_files(files):
+    text = ""
+    pdf_files = []
+    docx_files = []
+    json_files = []
+
+    for file in files:
+        if file.name.endswith('.pdf'):
+            pdf_files.append(file)
+        elif file.name.endswith('.docx'):
+            docx_files.append(file)
+        elif file.name.endswith('.json'):
+            json_files.append(file)
+
+    if pdf_files:
+        text += get_pdf_text(pdf_files)
+    if docx_files:
+        text += get_docx_text(docx_files)
+    if json_files:
+        text += get_json_text(json_files)
+    
+    return text
+
+# Text divided into chunks
 def get_text_chunks(text):
     text_splitter = CharacterTextSplitter(
         separator="\n",
@@ -29,12 +72,14 @@ def get_text_chunks(text):
     chunks = text_splitter.split_text(text)
     return chunks
 
+# Chunks into vectordb
 def get_vectorstore(text_chunks, api_key):
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small", api_key=api_key)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
+# Create a chain
 def get_conversation_chain(vectorstore, api_key):
     llm = ChatOpenAI(api_key=api_key, model="gpt-3.5-turbo")
     # llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
@@ -48,6 +93,7 @@ def get_conversation_chain(vectorstore, api_key):
     )
     return conversation_chain
 
+# Handle the user query
 def handle_userinput(user_question):
     response = st.session_state.conversation({'question': user_question})
     st.session_state.chat_history = response['chat_history']
@@ -90,14 +136,17 @@ def ui():
         st.subheader("Documents")
     
         api_key = st.text_input(label="Enter OpenAI api key", type="password", placeholder="OPENAI_API_KEY")
-        pdf_docs = st.file_uploader(
-            "Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
+        docs = st.file_uploader(
+            "Upload your files here (PDFs, DOCX, JSON) and click on 'Process'",
+            type=["pdf", "docx", "json"], 
+            accept_multiple_files=True
+        )
 
         if st.button("Process"):
             with st.status("In process...", expanded=True, state="running") as status:
                 # get pdf text
                 st.write("Get the text from the PDFs files")
-                raw_text = get_pdf_text(pdf_docs)
+                raw_text = get_text_from_files(docs)
                 time.sleep(5)
 
                 # get the text chunks
