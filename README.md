@@ -1,12 +1,12 @@
 # Multiple PDFs QueryBot
 
-The Multiple PDFs QueryBot is a Python-based tool for interacting with multiple PDF documents through natural language queries. Users can ask questions about the content of the PDFs, and the app will deliver relevant answers based on the information within the documents. This application leverages a language model to produce precise responses. Just to let you know, the app's responses are limited to the content of the loaded PDFs.
+The **Multi-Files QueryBot** is a Python-based tool that allows users to interact with multiple document types, including `PDFs`, `.docx`, and `.json` files, through natural language queries. Users can ask questions based on the content of these documents, and the app provides accurate, context-aware responses.\n* It’s designed to help users efficiently navigate and extract insights from large sets of documents, training them to ask more effective and precise questions.
 
 ## How it works?
 
 The application follows these steps to respond to your questions:
 
-- **PDF Loading**: The app reads multiple PDF documents and extracts their text content.
+- **Files Loading**: The app reads multiple documents and extracts their text content.
 - **Text Chunking**: The extracted text is divided into smaller, manageable chunks for efficient processing.
 - **Language Model**: The application employs a language model to create vector representations (embeddings) of the text chunks.
 - **Similarity Matching**: When a question is asked, the app compares it to the text chunks and identifies those with the highest semantic similarity.

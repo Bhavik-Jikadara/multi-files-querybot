@@ -11,3 +11,4 @@ langchain-openai
 python-docx 
 pillow
 pytesseract
+langchain-huggingface
